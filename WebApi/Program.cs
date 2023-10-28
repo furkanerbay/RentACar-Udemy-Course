@@ -2,6 +2,7 @@ using Application;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,9 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
-//builder.Services.AddDistributedMemoryCache(); //InMemory calýsýyor.
-builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration="localhost:6379"); // Redis Cache -> nerde olacak ?
+builder.Services.AddDistributedMemoryCache(); //InMemory calýsýyor.
+//builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration="localhost:6379"); // Redis Cache -> nerde olacak ?
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -25,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-if(app.Environment.IsProduction()) //Eðer app'nin Environment'ý IsProduction ise bunu calsýtýr. Developmentta bana son kullanýcý muamelýsý yapma detaylarý ýle sistem hatasý seklýnde var. Production'ý geçilir ise middleware'i devreye sok.
+//if(app.Environment.IsProduction()) //Eðer app'nin Environment'ý IsProduction ise bunu calsýtýr. Developmentta bana son kullanýcý muamelýsý yapma detaylarý ýle sistem hatasý seklýnde var. Production'ý geçilir ise middleware'i devreye sok.
 app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
